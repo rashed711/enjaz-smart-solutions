@@ -3,11 +3,12 @@ import React from 'react';
 import { Reveal } from './Reveal';
 import { Icon } from './Icon';
 import { Language } from '../App';
+import { SiteSettings } from '../types';
 
 interface EmailHostingProps {
   onNavigate: (path: string, hash?: string) => void;
-  onOrder: (planName: string) => void;
   lang: Language;
+  settings: SiteSettings;
 }
 
 const PLANS = [
@@ -63,7 +64,7 @@ const PLANS = [
   }
 ];
 
-export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrder, lang }) => {
+export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, lang, settings }) => {
   const labels = {
     back: lang === 'ar' ? 'الرئيسية' : 'Home',
     title: lang === 'ar' ? 'باقات' : 'Email',
@@ -72,8 +73,24 @@ export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrde
     popular: lang === 'ar' ? 'الأكثر طلباً' : 'Best Value',
     currency: lang === 'ar' ? 'ج.م' : 'EGP',
     perYear: lang === 'ar' ? 'سنوياً' : '/year',
-    order: lang === 'ar' ? 'اشترك' : 'Subscribe',
+    order: lang === 'ar' ? 'اشترك الآن' : 'Subscribe Now',
     featuresTitle: lang === 'ar' ? 'المميزات:' : 'Features:',
+  };
+
+  const handleSubscribe = (plan: typeof PLANS[0]) => {
+    const planName = lang === 'ar' ? plan.name_ar : plan.name_en;
+    const price = plan.price;
+    const currency = labels.currency;
+    
+    const message = lang === 'ar' 
+      ? `مرحباً، أود الاشتراك في *${planName}* بسعر *${price} ${currency}* سنوياً.`
+      : `Hello, I would like to subscribe to the *${planName}* for *${price} ${currency}* per year.`;
+      
+    // Check if whatsapp_url already has query params
+    const separator = settings.whatsapp_url.includes('?') ? '&' : '?';
+    const finalUrl = `${settings.whatsapp_url}${separator}text=${encodeURIComponent(message)}`;
+    
+    window.open(finalUrl, '_blank');
   };
 
   return (
@@ -175,7 +192,7 @@ export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrde
 
                 {/* Action */}
                 <button 
-                  onClick={() => onOrder(lang === 'ar' ? plan.name_ar : plan.name_en)}
+                  onClick={() => handleSubscribe(plan)}
                   className={`w-full py-2.5 md:py-4 rounded-lg md:rounded-xl font-bold text-[10px] md:text-sm transition-all transform active:scale-95 flex items-center justify-center gap-1.5 md:gap-2 ${
                     plan.popular 
                       ? 'bg-primary-600 text-white hover:bg-primary-500 shadow-lg shadow-primary-500/25' 

@@ -6,7 +6,7 @@ import { About } from './components/About';
 import { Services } from './components/Services';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
-import { EmailHostingV2 } from './components/EmailHostingV2'; // Changed Import
+import { EmailHostingV2 } from './components/EmailHostingV2';
 import { ApiService } from './services/api';
 import { SiteSettings, Service, Project } from './types';
 import { MOCK_SETTINGS } from './services/mockData';
@@ -41,7 +41,6 @@ function App() {
       window.history.pushState({}, '', path);
     } catch (e) {
       // Fail silently in restricted environments.
-      // The app will still function correctly using the React State (setCurrentPath) below.
     }
     
     setCurrentPath(path);
@@ -94,10 +93,6 @@ function App() {
     }
   }, [currentPath, pendingScroll]);
 
-  const handleOrderPlan = (planName: string) => {
-    navigate('/', 'contact');
-  };
-
   const toggleLanguage = () => {
     setLang(prev => prev === 'ar' ? 'en' : 'ar');
   };
@@ -138,7 +133,7 @@ function App() {
       
       <main>
         {isEmailHosting ? (
-          <EmailHostingV2 onNavigate={navigate} onOrder={handleOrderPlan} lang={lang} />
+          <EmailHostingV2 onNavigate={navigate} lang={lang} settings={settings} />
         ) : (
           /* Default to Home for / and any unknown route */
           <>
