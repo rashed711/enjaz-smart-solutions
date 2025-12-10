@@ -7,6 +7,7 @@ import { Services } from './components/Services';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
 import { EmailHostingV2 } from './components/EmailHostingV2';
+import { PortfolioPage } from './components/PortfolioPage';
 import { ApiService } from './services/api';
 import { SiteSettings, Service, Project } from './types';
 import { MOCK_SETTINGS } from './services/mockData';
@@ -37,7 +38,6 @@ function App() {
   const navigate = (path: string, hash?: string) => {
     try {
       // Try to update URL using History API
-      // This works on real hosting (Vercel) but might fail in sandboxed previews
       window.history.pushState({}, '', path);
     } catch (e) {
       // Fail silently in restricted environments.
@@ -110,6 +110,7 @@ function App() {
 
   const isHome = currentPath === '/' || currentPath === '/index.html';
   const isEmailHosting = currentPath === '/email-hosting';
+  const isPortfolioPage = currentPath === '/portfolio';
 
   return (
     <div className={`antialiased text-gray-800 bg-secondary-950 ${lang === 'en' ? 'font-sans' : ''}`}>
@@ -134,13 +135,15 @@ function App() {
       <main>
         {isEmailHosting ? (
           <EmailHostingV2 onNavigate={navigate} lang={lang} settings={settings} />
+        ) : isPortfolioPage ? (
+          <PortfolioPage onNavigate={navigate} lang={lang} projects={projects} />
         ) : (
           /* Default to Home for / and any unknown route */
           <>
             <Hero settings={settings} lang={lang} />
             <About lang={lang} />
             <Services services={services} onNavigate={navigate} lang={lang} />
-            <Portfolio projects={projects} lang={lang} />
+            <Portfolio projects={projects} lang={lang} onNavigate={navigate} />
             <Contact settings={settings} lang={lang} />
           </>
         )}
@@ -178,6 +181,7 @@ function App() {
               <ul className="space-y-3 text-gray-400">
                 <li><button onClick={() => navigate('/')} className="hover:text-primary-400 transition-colors">{lang === 'ar' ? 'الرئيسية' : 'Home'}</button></li>
                 <li><button onClick={() => navigate('/email-hosting')} className="hover:text-primary-400 transition-colors">{lang === 'ar' ? 'باقات الاستضافة' : 'Hosting Plans'}</button></li>
+                <li><button onClick={() => navigate('/portfolio')} className="hover:text-primary-400 transition-colors">{lang === 'ar' ? 'أعمالنا' : 'Portfolio'}</button></li>
               </ul>
             </div>
 

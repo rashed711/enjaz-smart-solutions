@@ -55,10 +55,34 @@ export const MOCK_SERVICES: Service[] = [
 ];
 
 export const MOCK_PROJECTS: Project[] = [
-  { id: 1, title_ar: "منصة تعليمية ذكية", title_en: "Smart LMS Platform", category: "Web App", image_url: "https://picsum.photos/600/400?random=1" },
-  { id: 2, title_ar: "متجر إلكتروني متكامل", title_en: "E-commerce Store", category: "E-commerce", image_url: "https://picsum.photos/600/400?random=2" },
-  { id: 3, title_ar: "تطبيق حجوزات طبية", title_en: "Medical Booking App", category: "Mobile App", image_url: "https://picsum.photos/600/400?random=3" },
-  { id: 4, title_ar: "موقع شركة عقارية", title_en: "Real Estate Website", category: "Corporate", image_url: "https://picsum.photos/600/400?random=4" },
+  { 
+    id: 1, 
+    title_ar: "منصة تعليمية ذكية", 
+    title_en: "Smart LMS Platform", 
+    category: "Web App", 
+    image_url: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=1000&auto=format&fit=crop" 
+  },
+  { 
+    id: 2, 
+    title_ar: "متجر إلكتروني متكامل", 
+    title_en: "E-commerce Store", 
+    category: "E-commerce", 
+    image_url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop" 
+  },
+  { 
+    id: 3, 
+    title_ar: "تطبيق حجوزات طبية", 
+    title_en: "Medical Booking App", 
+    category: "Mobile App", 
+    image_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop" 
+  },
+  { 
+    id: 4, 
+    title_ar: "موقع شركة عقارية", 
+    title_en: "Real Estate Website", 
+    category: "Corporate", 
+    image_url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop" 
+  },
 ];
 
 export const MOCK_TEAM: TeamMember[] = [

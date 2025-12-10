@@ -1,20 +1,28 @@
+
 import React from 'react';
 import { Project } from '../types';
 import { Reveal } from './Reveal';
-import { scrollToSection } from '../utils/scroll';
 import { Language } from '../App';
 
 interface PortfolioProps {
   projects: Project[];
   lang: Language;
+  onNavigate?: (path: string, hash?: string) => void;
 }
 
-export const Portfolio: React.FC<PortfolioProps> = ({ projects, lang }) => {
+export const Portfolio: React.FC<PortfolioProps> = ({ projects, lang, onNavigate }) => {
   const labels = {
     tag: lang === 'ar' ? 'معرض الأعمال' : 'Our Portfolio',
     title: lang === 'ar' ? 'قصص نجاح صنعناها' : 'Success Stories',
     desc: lang === 'ar' ? 'نفتخر بمشاركة أحدث المشاريع التي قمنا بتنفيذها لشركاء النجاح.' : 'We are proud to share our latest projects delivered to our partners.',
     viewAll: lang === 'ar' ? 'مشاهدة كل المشاريع' : 'View All Projects'
+  };
+
+  const handleViewAll = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onNavigate) {
+      onNavigate('/portfolio');
+    }
   };
 
   return (
@@ -30,8 +38,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ projects, lang }) => {
             </Reveal>
             <Reveal delay={200}>
               <a 
-                href="#contact" 
-                onClick={(e) => scrollToSection(e, 'contact')}
+                href="/portfolio" 
+                onClick={handleViewAll}
                 className="group inline-flex items-center gap-2 text-primary-700 font-bold hover:text-primary-500 transition-colors"
               >
                 <span>{labels.viewAll}</span>
