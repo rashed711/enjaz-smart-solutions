@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { Reveal } from './Reveal';
 import { Icon } from './Icon';
 import { Language } from '../App';
@@ -64,8 +64,6 @@ const PLANS = [
 ];
 
 export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrder, lang }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const labels = {
     back: lang === 'ar' ? 'الرئيسية' : 'Home',
     title: lang === 'ar' ? 'باقات' : 'Email',
@@ -74,13 +72,12 @@ export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrde
     popular: lang === 'ar' ? 'الأكثر طلباً' : 'Best Value',
     currency: lang === 'ar' ? 'ج.م' : 'EGP',
     perYear: lang === 'ar' ? 'سنوياً' : '/year',
-    order: lang === 'ar' ? 'اشترك الآن' : 'Subscribe Now',
+    order: lang === 'ar' ? 'اشترك' : 'Subscribe',
     featuresTitle: lang === 'ar' ? 'المميزات:' : 'Features:',
-    swipe: lang === 'ar' ? 'اسحب لرؤية المزيد ←' : 'Swipe for more →'
   };
 
   return (
-    <div className="min-h-screen bg-secondary-950 pt-24 pb-20 relative overflow-x-hidden">
+    <div className="min-h-screen bg-secondary-950 pt-20 md:pt-24 pb-20 relative overflow-x-hidden">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -88,94 +85,87 @@ export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrde
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-800/20 rounded-full blur-[100px]"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      {/* Reduced Container Padding on Mobile for Max Width */}
+      <div className="w-full md:container md:mx-auto px-1.5 md:px-4 relative z-10">
         
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-10 md:mb-16">
+        <div className="flex flex-col items-center text-center mb-8 md:mb-16">
           <button 
             onClick={() => onNavigate('/')}
-            className="group flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all mb-6 backdrop-blur-md"
+            className="group flex items-center gap-2 px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all mb-4 md:mb-6 backdrop-blur-md"
           >
-            <svg className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''} group-hover:-translate-x-1 transition-transform`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-            <span className="text-sm font-medium">{labels.back}</span>
+            <svg className={`w-3 h-3 md:w-4 md:h-4 ${lang === 'ar' ? 'rotate-180' : ''} group-hover:-translate-x-1 transition-transform`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            <span className="text-xs md:text-sm font-medium">{labels.back}</span>
           </button>
           
           <Reveal width="100%">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight">
+            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white mb-2 md:mb-4 tracking-tight">
               {labels.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200">{labels.titleHighlight}</span>
             </h1>
-            <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-lg leading-relaxed">
+            <p className="text-gray-400 max-w-xl mx-auto text-xs md:text-lg leading-relaxed px-4">
               {labels.desc}
             </p>
           </Reveal>
         </div>
 
-        {/* Mobile Swipe Indicator */}
-        <div className="md:hidden text-center mb-4 text-xs text-primary-400 font-medium animate-bounce opacity-70">
-           {labels.swipe}
-        </div>
-
         {/* 
-            CAROUSEL CONTAINER 
-            - Mobile: Flex + Horizontal Scroll + Snap
-            - Desktop: Grid
+            GRID LAYOUT (Fixed for Mobile 2-Cols)
+            Mobile: grid-cols-2 gap-2
         */}
-        <div 
-            ref={scrollRef}
-            className="flex md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 md:pb-0 px-4 md:px-0 -mx-4 md:mx-0 scrollbar-hide"
-            style={{ scrollBehavior: 'smooth' }}
-        >
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 md:gap-6 lg:gap-8 w-full">
           {PLANS.map((plan, index) => (
             <div 
               key={plan.id} 
-              className={`snap-center shrink-0 w-[85vw] sm:w-[350px] md:w-auto flex flex-col relative group rounded-3xl border transition-all duration-500 overflow-hidden ${
+              className={`relative flex flex-col rounded-xl md:rounded-3xl border transition-all duration-300 overflow-hidden ${
                 plan.popular 
-                  ? 'bg-gradient-to-b from-secondary-900 to-secondary-950 border-primary-500 shadow-[0_10px_40px_-10px_rgba(18,161,107,0.3)] scale-[1.02] md:scale-110 z-10' 
-                  : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 scale-100'
+                  ? 'bg-gradient-to-b from-secondary-900 to-secondary-950 border-primary-500 shadow-[0_5px_20px_-5px_rgba(18,161,107,0.3)] z-10' 
+                  : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
               }`}
             >
               {/* Popular Glow */}
               {plan.popular && (
-                  <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-primary-500/10 to-transparent pointer-events-none"></div>
+                  <div className="absolute top-0 inset-x-0 h-1 md:h-1.5 bg-primary-500"></div>
               )}
               
-              <div className="p-6 md:p-8 flex flex-col h-full relative z-10">
+              <div className="p-3 md:p-8 flex flex-col h-full relative z-10">
                 
-                {/* Header */}
-                <div className="flex justify-between items-start mb-6">
-                   <div>
-                      <h3 className={`text-lg font-bold mb-1 ${plan.popular ? 'text-primary-400' : 'text-gray-200'}`}>
+                {/* Card Header */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 md:mb-6 gap-2">
+                   <div className="w-full">
+                      <h3 className={`text-[11px] md:text-lg font-bold mb-1 truncate ${plan.popular ? 'text-primary-400' : 'text-gray-200'}`}>
                         {lang === 'ar' ? plan.name_ar : plan.name_en}
                       </h3>
                       {plan.popular && (
-                        <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-primary-500 text-white uppercase tracking-wider">
+                        <span className="inline-block px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-bold bg-primary-500 text-white uppercase tracking-wider">
                            {labels.popular}
                         </span>
                       )}
                    </div>
-                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold ${plan.popular ? 'bg-primary-500/20 text-primary-400' : 'bg-white/5 text-gray-500'}`}>
+                   
+                   {/* Storage Icon/Badge */}
+                   <div className={`hidden md:flex w-12 h-12 rounded-2xl items-center justify-center text-xl font-bold ${plan.popular ? 'bg-primary-500/20 text-primary-400' : 'bg-white/5 text-gray-500'}`}>
                       {plan.storage.split(' ')[0]}
                       <span className="text-[10px] ml-0.5 mt-1 opacity-70">GB</span>
                    </div>
                 </div>
 
                 {/* Price */}
-                <div className="mb-8">
-                   <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-black text-white tracking-tight">{plan.price}</span>
-                      <span className="text-sm text-gray-400 font-medium">{labels.currency}</span>
+                <div className="mb-4 md:mb-8 text-center md:text-start">
+                   <div className="flex items-baseline justify-center md:justify-start gap-0.5 md:gap-1">
+                      <span className="text-xl md:text-4xl font-black text-white tracking-tight">{plan.price}</span>
+                      <span className="text-[10px] md:text-sm text-gray-400 font-medium">{labels.currency}</span>
                    </div>
-                   <div className="text-xs text-gray-500 mt-1">{labels.perYear}</div>
+                   <div className="text-[9px] md:text-xs text-gray-500 mt-0.5 md:mt-1">{labels.perYear}</div>
                 </div>
 
                 {/* Features */}
-                <div className="mb-8 flex-grow">
-                   <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{labels.featuresTitle}</p>
-                   <ul className="space-y-3">
+                <div className="mb-4 md:mb-8 flex-grow">
+                   <p className="text-[9px] md:text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 md:mb-4 hidden md:block">{labels.featuresTitle}</p>
+                   <ul className="space-y-1.5 md:space-y-3">
                       {(lang === 'ar' ? plan.features_ar : plan.features_en).map((feature, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm text-gray-300">
-                           <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${plan.popular ? 'bg-primary-500 text-white' : 'bg-white/10 text-gray-400'}`}>
-                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                        <li key={i} className="flex items-start gap-1.5 md:gap-3 text-[10px] md:text-sm text-gray-300 leading-tight">
+                           <span className={`w-3 h-3 md:w-5 md:h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${plan.popular ? 'bg-primary-500 text-white' : 'bg-white/10 text-gray-400'}`}>
+                              <svg className="w-2 h-2 md:w-3 md:h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                            </span>
                            {feature}
                         </li>
@@ -186,14 +176,14 @@ export const EmailHostingV2: React.FC<EmailHostingProps> = ({ onNavigate, onOrde
                 {/* Action */}
                 <button 
                   onClick={() => onOrder(lang === 'ar' ? plan.name_ar : plan.name_en)}
-                  className={`w-full py-4 rounded-xl font-bold text-sm transition-all transform active:scale-95 flex items-center justify-center gap-2 ${
+                  className={`w-full py-2.5 md:py-4 rounded-lg md:rounded-xl font-bold text-[10px] md:text-sm transition-all transform active:scale-95 flex items-center justify-center gap-1.5 md:gap-2 ${
                     plan.popular 
                       ? 'bg-primary-600 text-white hover:bg-primary-500 shadow-lg shadow-primary-500/25' 
                       : 'bg-white/10 text-white hover:bg-white/20 border border-white/5'
                   }`}
                 >
                   {labels.order}
-                  <svg className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  <svg className={`hidden md:block w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </button>
               </div>
             </div>
