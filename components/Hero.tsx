@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SiteSettings } from '../types';
 import { CountUp } from './CountUp';
@@ -31,8 +32,8 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
 
   const labels = {
     tag: lang === 'ar' ? 'مستقبل الحلول الرقمية يبدأ هنا' : 'The future of digital solutions starts here',
-    ctaPrimary: lang === 'ar' ? 'ابدأ مشروعك الآن' : 'Start Your Project',
-    ctaSecondary: lang === 'ar' ? 'شاهد أعمالنا' : 'View Portfolio',
+    ctaPrimary: lang === 'ar' ? 'ابدأ مشروعك' : 'Start Project', // Shortened for mobile fit
+    ctaSecondary: lang === 'ar' ? 'أعمالنا' : 'Portfolio', // Shortened for mobile fit
     stats: {
       projects: lang === 'ar' ? 'مشروع ناجح' : 'Projects Done',
       years: lang === 'ar' ? 'سنوات خبرة' : 'Years Exp.',
@@ -90,25 +91,26 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
           </Reveal>
 
           <Reveal delay={600}>
-            <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center ${lang === 'ar' ? 'lg:justify-start' : 'lg:justify-start'} mb-10 sm:mb-20 px-6 sm:px-0`}>
+            {/* Side-by-side buttons on mobile: flex-row instead of flex-col */}
+            <div className={`flex flex-row gap-3 sm:gap-4 justify-center ${lang === 'ar' ? 'lg:justify-start' : 'lg:justify-start'} mb-10 sm:mb-20 px-2 sm:px-0`}>
               <a 
                 href="#services" 
                 onClick={(e) => scrollToSection(e, 'services')}
-                className="group relative w-full sm:w-auto px-6 py-3.5 bg-primary-600 text-white font-bold rounded-xl overflow-hidden shadow-[0_10px_40px_-10px_rgba(16,185,129,0.5)] transition-all hover:scale-105 active:scale-95 text-center"
+                className="group relative flex-1 sm:flex-none px-4 py-3.5 bg-primary-600 text-white font-bold rounded-xl overflow-hidden shadow-[0_10px_40px_-10px_rgba(16,185,129,0.5)] transition-all hover:scale-105 active:scale-95 text-center text-xs sm:text-base"
               >
                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                 <span className="relative flex items-center justify-center gap-2">
                   {labels.ctaPrimary}
-                  <svg className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${lang === 'ar' ? 'rtl:rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  <svg className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1 ${lang === 'ar' ? 'rtl:rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </span>
               </a>
               <a 
                 href="#portfolio" 
                 onClick={(e) => scrollToSection(e, 'portfolio')}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/30 transition-all backdrop-blur-sm flex items-center justify-center gap-2 active:scale-95 text-center"
+                className="flex-1 sm:flex-none px-4 py-3.5 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/30 transition-all backdrop-blur-sm flex items-center justify-center gap-2 active:scale-95 text-center text-xs sm:text-base"
               >
                  <span>{labels.ctaSecondary}</span>
-                 <svg className="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </a>
             </div>
           </Reveal>
