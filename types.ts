@@ -1,3 +1,4 @@
+
 export interface SiteSettings {
   company_name_ar: string;
   company_name_en: string;
@@ -5,6 +6,7 @@ export interface SiteSettings {
   hero_subtitle_ar: string;
   phone: string;
   email: string;
+  address_ar: string; // Added address field
   whatsapp_url: string;
   projects_count: number;
   years_experience: number;

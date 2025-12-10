@@ -1,3 +1,4 @@
+
 import { SiteSettings, Service, Project, TeamMember } from '../types';
 
 export const MOCK_SETTINGS: SiteSettings = {
@@ -5,9 +6,10 @@ export const MOCK_SETTINGS: SiteSettings = {
   company_name_en: "Enjaz Tech",
   hero_title_ar: "نحول أفكارك إلى واقع رقمي متكامل",
   hero_subtitle_ar: "شريكك الاستراتيجي في تطوير البرمجيات، تصميم واجهات المستخدم، والتسويق الرقمي. نبتكر حلولاً تقنية تضمن نمو أعمالك.",
-  phone: "+966 50 000 0000",
-  email: "info@enjaztech.com",
-  whatsapp_url: "https://wa.me/966500000000",
+  phone: "+20 12 25251888",
+  email: "info@enjaz.app",
+  address_ar: "مكرم عبيد، مدينة نصر، القاهرة",
+  whatsapp_url: "https://wa.me/201225251888",
   projects_count: 150,
   years_experience: 12,
   satisfaction_rate: 98,
