@@ -11,17 +11,17 @@ interface HeroProps {
 const SLIDER_IMAGES = [
   {
     id: 1,
-    url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
+    url: "https://i.pinimg.com/736x/68/aa/61/68aa613db13accf414562a2ec1fd72d7.jpg",
     alt: "Cybersecurity & Code"
   },
   {
     id: 2,
-    url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+    url: "https://i.pinimg.com/736x/d1/eb/8f/d1eb8f3e2355f0483a50618f571b37c8.jpg",
     alt: "Data Analytics"
   },
   {
     id: 3,
-    url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
+    url: "https://i.pinimg.com/736x/d7/12/01/d71201eb2cd5be2a26a1ea0a1c703b8a.jpg",
     alt: "Global Network"
   }
 ];
