@@ -6,7 +6,7 @@ import { About } from './components/About';
 import { Services } from './components/Services';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
-import { EmailHosting } from './components/EmailHosting';
+import { EmailHostingV2 } from './components/EmailHostingV2'; // Changed Import
 import { ApiService } from './services/api';
 import { SiteSettings, Service, Project } from './types';
 import { MOCK_SETTINGS } from './services/mockData';
@@ -138,7 +138,7 @@ function App() {
       
       <main>
         {isEmailHosting ? (
-          <EmailHosting onNavigate={navigate} onOrder={handleOrderPlan} lang={lang} />
+          <EmailHostingV2 onNavigate={navigate} onOrder={handleOrderPlan} lang={lang} />
         ) : (
           /* Default to Home for / and any unknown route */
           <>

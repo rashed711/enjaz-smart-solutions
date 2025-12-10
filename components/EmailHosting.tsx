@@ -84,42 +84,45 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-secondary-900 to-secondary-950 z-0 pointer-events-none"></div>
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-10"></div>
       
-      <div className="container mx-auto px-2 md:px-6 relative z-10">
+      {/* 
+          Container Layout Logic:
+          - Mobile: w-full px-1.5 (6px padding) -> Maximize space
+          - Tablet/Desktop: standard container with larger padding
+      */}
+      <div className="w-full md:container md:mx-auto px-1.5 md:px-6 relative z-10">
         
         {/* Header Section */}
-        <div className="flex flex-col items-center text-center mb-10 md:mb-16">
+        <div className="flex flex-col items-center text-center mb-6 md:mb-16">
           <button 
             onClick={() => onNavigate('/')}
-            className="group flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all mb-8 backdrop-blur-md"
+            className="group flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all mb-6 md:mb-8 backdrop-blur-md"
           >
             <svg className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''} group-hover:-translate-x-1 transition-transform`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             <span className="text-sm font-medium">{labels.back}</span>
           </button>
           
           <Reveal width="100%">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight">
+            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight">
               {labels.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200">{labels.titleHighlight}</span>
             </h1>
-            <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-lg leading-relaxed">
+            <p className="text-gray-400 max-w-xl mx-auto text-xs md:text-lg leading-relaxed px-4">
               {labels.desc}
             </p>
           </Reveal>
         </div>
 
         {/* 
-           Responsive Grid Layout 
-           - Mobile: grid-cols-2 (User requirement), gap-2
-           - Tablet: grid-cols-3, gap-4
-           - Desktop: grid-cols-5, gap-6
-           - 'items-stretch' ensures all cards in a row have the same height
+           Responsive Grid Layout - TIGHT FIT
+           - Mobile: gap-1.5 (6px)
+           - Result: 6px Left | Card | 6px Gap | Card | 6px Right
         */}
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 md:gap-4 lg:gap-6 mb-12 items-stretch justify-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-1.5 md:gap-4 lg:gap-6 mb-12 w-full">
           {PLANS.map((plan, index) => (
             <Reveal key={plan.id} delay={index * 50} className="h-full">
               <div 
-                className={`relative h-full flex flex-col rounded-xl md:rounded-2xl border transition-all duration-300 group overflow-hidden ${
+                className={`relative h-full w-full min-w-0 max-w-full flex flex-col rounded-xl md:rounded-2xl border transition-all duration-300 group overflow-hidden ${
                   plan.popular 
-                    ? 'bg-gradient-to-b from-secondary-900 to-secondary-950 border-primary-500/50 shadow-lg shadow-primary-500/10 z-10 scale-[1.02] md:scale-105' 
+                    ? 'bg-gradient-to-b from-secondary-900 to-secondary-950 border-primary-500/50 shadow-lg shadow-primary-500/10 z-10 scale-100 md:scale-105' 
                     : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                 }`}
               >
@@ -129,36 +132,36 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary-500 shadow-[0_0_10px_rgba(18,161,107,0.5)]"></div>
                 )}
                 {plan.popular && (
-                  <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-primary-500/20 border border-primary-500/50 text-primary-300 text-[9px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide backdrop-blur-md">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-primary-500/20 border border-primary-500/50 text-primary-300 text-[9px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide backdrop-blur-md whitespace-nowrap z-20">
                     {labels.popular}
                   </div>
                 )}
 
                 {/* Content Container */}
-                <div className={`flex flex-col h-full p-3 md:p-6 ${plan.popular ? 'pt-8 md:pt-10' : 'pt-5 md:pt-8'}`}>
+                <div className={`flex flex-col h-full p-2.5 md:p-6 ${plan.popular ? 'pt-9 md:pt-10' : 'pt-5 md:pt-8'}`}>
                   
                   {/* Title & Storage */}
-                  <div className="text-center mb-4 md:mb-6">
-                    <h3 className={`text-[11px] md:text-lg font-bold mb-2 truncate ${plan.popular ? 'text-primary-400' : 'text-gray-200'}`}>
+                  <div className="text-center mb-3 md:mb-6">
+                    <h3 className={`text-[10px] md:text-lg font-bold mb-1 md:mb-2 truncate ${plan.popular ? 'text-primary-400' : 'text-gray-200'}`}>
                       {lang === 'ar' ? plan.name_ar : plan.name_en}
                     </h3>
-                    <div className="text-xl md:text-3xl font-black text-white mb-2 tracking-tight dir-ltr">
+                    <div className="text-lg md:text-3xl font-black text-white mb-1 md:mb-2 tracking-tight dir-ltr">
                       {plan.storage}
                     </div>
                     <div className="flex flex-col justify-center items-center">
-                       <span className="text-primary-500 font-bold text-sm md:text-xl">{plan.price} <span className="text-[10px] md:text-xs font-normal text-gray-400">{labels.currency}</span></span>
+                       <span className="text-primary-500 font-bold text-sm md:text-xl">{plan.price} <span className="text-[9px] md:text-xs font-normal text-gray-400">{labels.currency}</span></span>
                        <span className="text-[9px] md:text-xs text-gray-500">{labels.perYear}</span>
                     </div>
                   </div>
 
                   {/* Divider */}
-                  <div className="h-px w-full bg-white/10 mb-4"></div>
+                  <div className="h-px w-full bg-white/10 mb-3 md:mb-4"></div>
 
                   {/* Features List (Flex Grow pushes button down) */}
-                  <ul className="space-y-2 md:space-y-3 mb-6 flex-grow">
+                  <ul className="space-y-1.5 md:space-y-3 mb-4 md:mb-6 flex-grow">
                     {(lang === 'ar' ? plan.features_ar : plan.features_en).map((feature, i) => (
-                      <li key={i} className="flex items-start gap-1.5 md:gap-2 text-[10px] md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                        <svg className="w-3.5 h-3.5 md:w-5 md:h-5 text-primary-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <li key={i} className="flex items-start gap-1 md:gap-2 text-[10px] md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                        <svg className="w-3 h-3 md:w-5 md:h-5 text-primary-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                         <span className="leading-tight">{feature}</span>
                       </li>
                     ))}
@@ -168,7 +171,7 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
                   <button 
                     type="button"
                     onClick={() => onOrder(lang === 'ar' ? plan.name_ar : plan.name_en)}
-                    className={`w-full py-2.5 md:py-3 rounded-lg md:rounded-xl font-bold text-[10px] md:text-sm transition-all transform active:scale-95 shadow-lg ${
+                    className={`w-full py-2 md:py-3 rounded-lg md:rounded-xl font-bold text-[10px] md:text-sm transition-all transform active:scale-95 shadow-lg ${
                       plan.popular 
                         ? 'bg-primary-600 text-white hover:bg-primary-500 shadow-primary-500/20' 
                         : 'bg-white/10 text-white hover:bg-white/20 border border-white/5'
@@ -183,20 +186,20 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
         </div>
 
         {/* Info Footer */}
-        <div className="max-w-3xl mx-auto bg-secondary-900/40 border border-white/5 rounded-2xl p-4 md:p-6 backdrop-blur-sm text-center">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12">
-             <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 shrink-0">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div className="max-w-3xl mx-auto bg-secondary-900/40 border border-white/5 rounded-2xl p-4 md:p-6 backdrop-blur-sm text-center mx-2 md:mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-12">
+             <div className="flex items-center gap-2 md:gap-3">
+                 <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 shrink-0">
+                    <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                  </div>
-                 <p className="text-gray-400 text-xs md:text-sm text-right"> {labels.noteDomain}</p>
+                 <p className="text-gray-400 text-[10px] md:text-sm text-right"> {labels.noteDomain}</p>
              </div>
              <div className="hidden md:block w-px h-8 bg-white/10"></div>
-             <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center text-primary-400 shrink-0">
-                    <Icon name="check" className="w-4 h-4" />
+             <div className="flex items-center gap-2 md:gap-3">
+                 <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-primary-500/10 flex items-center justify-center text-primary-400 shrink-0">
+                    <Icon name="check" className="w-3 h-3 md:w-4 md:h-4" />
                  </div>
-                 <p className="text-gray-400 text-xs md:text-sm text-right">{labels.noteEmails}</p>
+                 <p className="text-gray-400 text-[10px] md:text-sm text-right">{labels.noteEmails}</p>
              </div>
           </div>
         </div>
