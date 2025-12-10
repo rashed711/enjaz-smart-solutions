@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { scrollToSection } from '../utils/scroll';
 import { Language } from '../App';
@@ -32,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
     { name: lang === 'ar' ? 'الرئيسية' : 'Home', id: 'home', path: '/' },
     { name: lang === 'ar' ? 'من نحن' : 'About', id: 'about', path: '/' },
     { name: lang === 'ar' ? 'خدماتنا' : 'Services', id: 'services', path: '/' },
+    { name: lang === 'ar' ? 'باقات الاستضافة' : 'Hosting Plans', id: 'hosting', path: '/email-hosting' },
     { name: lang === 'ar' ? 'أعمالنا' : 'Portfolio', id: 'portfolio', path: '/' },
     { name: lang === 'ar' ? 'اتصل بنا' : 'Contact', id: 'contact', path: '/' },
   ];
@@ -40,6 +40,13 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
     e.preventDefault();
     setMobileMenuOpen(false);
     
+    // Handle navigation to separate pages (like Email Hosting)
+    if (link.path !== '/') {
+      navigate(link.path);
+      return;
+    }
+
+    // Handle Home/Scroll navigation
     if (link.id === 'home' && link.path === '/') {
         navigate('/', 'home');
         return;
@@ -74,23 +81,23 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
             </div>
           </a>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-8 space-x-reverse items-center rtl:space-x-reverse">
+          {/* Desktop Nav - Using GAP for proper spacing in both AR/EN */}
+          <nav className="hidden md:flex items-center gap-5 lg:gap-8">
             {navLinks.map((link) => (
               <a 
                 key={link.id} 
                 href={link.path === '/' ? `/#${link.id}` : link.path} 
                 onClick={(e) => handleNavClick(e, link)}
-                className={`font-medium text-sm lg:text-base text-gray-300 hover:text-primary-400 transition-colors relative group py-2 ${lang === 'en' ? 'ml-8' : ''}`}
+                className={`font-medium text-sm lg:text-base text-gray-300 hover:text-primary-400 transition-colors relative group py-2`}
               >
                 {link.name}
-                <span className={`absolute bottom-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full ${lang === 'ar' ? 'left-0' : 'left-0'}`}></span>
+                <span className={`absolute bottom-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full ${lang === 'ar' ? 'right-0' : 'left-0'}`}></span>
               </a>
             ))}
           </nav>
 
           {/* CTA & Lang - Desktop */}
-          <div className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
+          <div className="hidden md:flex items-center gap-4">
               <button 
                 onClick={onToggleLang}
                 className="text-sm font-bold text-gray-300 hover:text-white transition-colors uppercase"
@@ -108,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden p-2 text-white bg-white/10 rounded-lg hover:bg-primary-500 hover:text-white transition-all focus:outline-none relative z-[110]" 
+            className="md:hidden p-3 -mr-2 text-white bg-white/10 rounded-lg hover:bg-primary-500 hover:text-white transition-all focus:outline-none relative z-[110]" 
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open Menu"
           >
@@ -128,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
       ></div>
 
       <div 
-        className={`fixed top-0 bottom-0 w-[85%] max-w-[320px] bg-secondary-950/95 backdrop-blur-xl border-l border-white/10 shadow-2xl z-[9999] transform transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) md:hidden flex flex-col h-[100dvh] ${
+        className={`fixed top-0 bottom-0 w-[85%] max-w-[320px] bg-secondary-950/95 backdrop-blur-xl border-l border-white/10 shadow-2xl z-[9999] transform transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) will-change-transform md:hidden flex flex-col h-[100dvh] ${
           mobileMenuOpen 
              ? 'translate-x-0' 
              : (lang === 'ar' ? 'translate-x-full right-0' : '-translate-x-full left-0')
@@ -142,9 +149,9 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
              </div>
              <button 
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-red-500/20 hover:text-red-500 transition-colors"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-red-500/20 hover:text-red-500 transition-colors"
              >
-               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
              </button>
           </div>
 
@@ -155,7 +162,7 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
                   key={link.id} 
                   href={link.path === '/' ? `/#${link.id}` : link.path} 
                   onClick={(e) => handleNavClick(e, link)} 
-                  className="flex items-center justify-between group p-4 rounded-xl hover:bg-primary-500/10 active:bg-primary-500/20 border border-transparent hover:border-primary-500/20 transition-all"
+                  className="flex items-center justify-between group p-4 rounded-xl hover:bg-primary-500/10 active:bg-primary-500/20 border border-transparent hover:border-primary-500/20 transition-all min-h-[60px]"
                 >
                   <span className="text-lg font-medium text-gray-200 group-hover:text-primary-400 transition-colors">{link.name}</span>
                   <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-500 group-hover:bg-primary-500 group-hover:text-white transition-all">
@@ -170,14 +177,14 @@ export const Header: React.FC<HeaderProps> = ({ navigate, isHomePage, lang, onTo
             <a 
               href="#contact" 
               onClick={(e) => handleNavClick(e, {id: 'contact', path: '/'})} 
-              className="block w-full bg-primary-600 text-center text-white px-5 py-4 rounded-xl font-bold shadow-lg shadow-primary-500/20 active:scale-95 transition-transform mb-4"
+              className="block w-full bg-primary-600 text-center text-white px-5 py-4 rounded-xl font-bold shadow-lg shadow-primary-500/20 active:scale-95 transition-transform mb-4 min-h-[50px] flex items-center justify-center"
             >
               {lang === 'ar' ? 'اطلب استشارة مجانية' : 'Get Free Consultation'}
             </a>
-            <div className="flex justify-center gap-6 text-sm">
-               <button onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} className={`font-medium ${lang === 'en' ? 'text-primary-400 font-bold' : 'text-gray-400'}`}>English</button>
-               <span className="text-gray-700">|</span>
-               <button onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} className={`font-medium ${lang === 'ar' ? 'text-primary-400 font-bold' : 'text-gray-400'}`}>العربية</button>
+            <div className="flex justify-center gap-6 text-sm py-2">
+               <button onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} className={`font-medium p-2 ${lang === 'en' ? 'text-primary-400 font-bold' : 'text-gray-400'}`}>English</button>
+               <span className="text-gray-700 py-2">|</span>
+               <button onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} className={`font-medium p-2 ${lang === 'ar' ? 'text-primary-400 font-bold' : 'text-gray-400'}`}>العربية</button>
             </div>
           </div>
       </div>

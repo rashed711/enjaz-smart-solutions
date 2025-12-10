@@ -83,11 +83,13 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-secondary-900 to-secondary-950 z-0"></div>
       <div className="absolute top-40 right-0 w-[600px] h-[600px] bg-primary-900/10 rounded-full blur-[100px] animate-pulse-slow z-0"></div>
 
-      <div className="container mx-auto px-3 sm:px-6 relative z-10">
+      {/* Reduced padding on mobile (px-2) to allow cards to fill screen width */}
+      <div className="container mx-auto px-2 sm:px-6 relative z-10">
         
         {/* Header */}
         <div className="text-center mb-8 sm:mb-16">
           <button 
+            type="button"
             onClick={() => onNavigate('/')}
             className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 sm:mb-8 transition-colors group text-sm sm:text-base py-2 px-4 rounded-full bg-white/5"
           >
@@ -105,10 +107,11 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
           </Reveal>
         </div>
 
-        {/* Pricing Grid - Optimized for Mobile (2 Cols) */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-6 mb-12 sm:mb-16">
+        {/* Pricing Grid - Tighter gap (gap-2) for mobile fit */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-6 mb-12 sm:mb-16 justify-center">
           {PLANS.map((plan, index) => (
             <Reveal key={plan.id} delay={index * 50} className="h-full">
+              {/* Reduced internal padding (p-2.5) for mobile */}
               <div className={`relative h-full flex flex-col rounded-xl sm:rounded-2xl p-2.5 sm:p-6 border transition-all duration-300 group hover:-translate-y-2 ${
                 plan.popular 
                   ? 'bg-secondary-900/90 border-primary-500 shadow-xl shadow-primary-500/10 z-10' 
@@ -122,19 +125,19 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
                 )}
 
                 <div className="mb-2 sm:mb-6 text-center mt-2">
-                  <h3 className={`text-[11px] sm:text-lg font-bold mb-1 truncate ${plan.popular ? 'text-primary-400' : 'text-white'}`}>
+                  <h3 className={`text-xs sm:text-lg font-bold mb-1 truncate ${plan.popular ? 'text-primary-400' : 'text-white'}`}>
                     {lang === 'ar' ? plan.name_ar : plan.name_en}
                   </h3>
-                  <div className="text-base sm:text-3xl font-black text-white mb-1 dir-ltr">{plan.storage}</div>
+                  <div className="text-lg sm:text-3xl font-black text-white mb-1 dir-ltr">{plan.storage}</div>
                   <div className="text-primary-500 font-bold text-xs sm:text-xl flex flex-col sm:block">
                     {plan.price} 
-                    <span className="text-[9px] sm:text-xs text-gray-500 font-normal sm:mx-1">{labels.currency}</span>
+                    <span className="text-[10px] sm:text-xs text-gray-500 font-normal sm:mx-1">{labels.currency}</span>
                   </div>
                 </div>
 
                 <ul className="space-y-1.5 sm:space-y-3 mb-3 sm:mb-8 flex-grow border-t border-white/5 pt-2 sm:pt-4">
                   {(lang === 'ar' ? plan.features_ar : plan.features_en).map((feature, i) => (
-                    <li key={i} className="flex items-start gap-1 sm:gap-2 text-[9px] sm:text-xs text-gray-300 leading-tight">
+                    <li key={i} className="flex items-start gap-1 sm:gap-2 text-[10px] sm:text-xs text-gray-300 leading-tight">
                       <svg className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-primary-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                       <span className="truncate">{feature}</span>
                     </li>
@@ -142,8 +145,9 @@ export const EmailHosting: React.FC<EmailHostingProps> = ({ onNavigate, onOrder,
                 </ul>
 
                 <button 
+                  type="button"
                   onClick={() => onOrder(lang === 'ar' ? plan.name_ar : plan.name_en)}
-                  className={`w-full py-1.5 sm:py-3 rounded-lg font-bold text-[10px] sm:text-sm transition-all ${
+                  className={`w-full py-2 sm:py-3 rounded-lg font-bold text-[10px] sm:text-sm transition-all ${
                     plan.popular 
                       ? 'bg-primary-600 text-white hover:bg-primary-500' 
                       : 'bg-white/10 text-white hover:bg-white/20'

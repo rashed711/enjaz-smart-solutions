@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Service } from '../types';
 import { Icon } from './Icon';
@@ -25,17 +24,17 @@ export const Services: React.FC<ServicesProps> = ({ services, onNavigate, lang }
   };
 
   return (
-    <section id="services" className="py-20 lg:py-32 bg-secondary-950 relative overflow-hidden">
+    <section id="services" className="py-16 lg:py-32 bg-secondary-950 relative overflow-hidden">
       
-      {/* Abstract Background Elements */}
+      {/* Abstract Background Elements - Reduced opacity on mobile via CSS */}
       <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-secondary-900 to-secondary-950"></div>
           <div className="absolute top-20 right-0 w-[800px] h-[800px] bg-primary-900/20 rounded-full blur-[120px] mix-blend-screen opacity-30 animate-pulse-slow"></div>
           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary-800/20 rounded-full blur-[100px] opacity-20"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16 lg:mb-24">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-10 lg:mb-24">
           <Reveal width="100%">
             <span className="inline-block py-1 px-3 rounded-md bg-primary-500/10 text-primary-400 font-bold text-xs tracking-[0.2em] uppercase mb-4 border border-primary-500/20">
               {labels.tag}
@@ -43,22 +42,23 @@ export const Services: React.FC<ServicesProps> = ({ services, onNavigate, lang }
             <h2 className="text-3xl lg:text-6xl font-black text-white mb-6 tracking-tight">
               {labels.title} <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 to-secondary-300">{labels.titleHighlight}</span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-base lg:text-lg font-light leading-relaxed">
+            <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg font-light leading-relaxed">
               {labels.desc}
             </p>
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Responsive Grid: 1 col mobile, 2 tablet, 4 desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
           {services.map((service, index) => (
             <Reveal key={service.id} delay={index * 100} className="h-full">
-              <div className="group h-full relative rounded-3xl p-[1px] bg-gradient-to-br from-white/10 to-transparent hover:from-primary-500/50 hover:to-primary-900/50 transition-all duration-500">
+              <div className="group h-full relative rounded-2xl lg:rounded-3xl p-[1px] bg-gradient-to-br from-white/10 to-transparent hover:from-primary-500/50 hover:to-primary-900/50 transition-all duration-500">
                 
-                {/* The Card Inner */}
-                <div className="relative h-full bg-secondary-900/60 backdrop-blur-xl rounded-[23px] p-6 lg:p-8 overflow-hidden transition-all duration-500 group-hover:bg-secondary-900/80 group-hover:-translate-y-2 group-hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.3)]">
+                {/* The Card Inner - Simplified blur on mobile via Global CSS */}
+                <div className="relative h-full bg-secondary-900/60 backdrop-blur-xl rounded-[15px] lg:rounded-[23px] p-6 lg:p-8 overflow-hidden transition-all duration-500 group-hover:bg-secondary-900/80 group-hover:-translate-y-2 group-hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.3)]">
                   
-                  {/* Neon Glow Blob inside card */}
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl transition-all duration-700 group-hover:scale-[2.5] group-hover:opacity-40"></div>
+                  {/* Neon Glow Blob inside card - hidden on mobile to save performance */}
+                  <div className="hidden sm:block absolute -top-10 -right-10 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl transition-all duration-700 group-hover:scale-[2.5] group-hover:opacity-40"></div>
                   
                   {/* Icon */}
                   <div className="relative w-12 h-12 lg:w-14 lg:h-14 mb-6 lg:mb-8">
@@ -80,6 +80,7 @@ export const Services: React.FC<ServicesProps> = ({ services, onNavigate, lang }
                   {/* Animated Link */}
                   <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
                     <button 
+                      type="button"
                       onClick={(e) => {
                         e.preventDefault();
                         if (service.id === 1) {

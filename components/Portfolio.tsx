@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Project } from '../types';
 import { Reveal } from './Reveal';
@@ -25,8 +24,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ projects, lang }) => {
             <Reveal width="100%">
               <div className="mb-6 md:mb-0">
                   <span className="text-primary-600 font-bold tracking-wider text-sm uppercase mb-2 block">{labels.tag}</span>
-                  <h2 className="text-4xl font-extrabold text-secondary-900 mb-4">{labels.title}</h2>
-                  <p className="text-gray-500 max-w-lg">{labels.desc}</p>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-secondary-900 mb-4">{labels.title}</h2>
+                  <p className="text-gray-500 max-w-lg text-sm md:text-base">{labels.desc}</p>
               </div>
             </Reveal>
             <Reveal delay={200}>
@@ -41,25 +40,26 @@ export const Portfolio: React.FC<PortfolioProps> = ({ projects, lang }) => {
             </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project, index) => (
             <Reveal key={project.id} delay={index * 150}>
-              <div className="group relative overflow-hidden rounded-[2rem] shadow-xl cursor-pointer h-80 isolate">
+              <div className="group relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem] shadow-xl cursor-pointer h-64 md:h-80 isolate">
                 <img 
                   src={project.image_url} 
                   alt={lang === 'ar' ? project.title_ar : project.title_en} 
                   className="w-full h-full object-cover transition-transform duration-[800ms] group-hover:scale-110 will-change-transform"
+                  loading="lazy"
                 />
                 
                 {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-secondary-950/90 via-secondary-900/50 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300"></div>
                 
                 {/* Content Slide-up */}
-                <div className="absolute inset-0 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   <span className="inline-block py-1 px-3 rounded-full bg-primary-500/20 backdrop-blur-md border border-primary-500/30 text-primary-300 text-xs font-bold mb-3 w-fit opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                     {project.category}
                   </span>
-                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primary-100 transition-colors">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-primary-100 transition-colors">
                     {lang === 'ar' ? project.title_ar : project.title_en}
                   </h3>
                   <div className="h-1 w-12 bg-primary-500 rounded-full group-hover:w-full transition-all duration-500"></div>

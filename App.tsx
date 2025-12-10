@@ -35,7 +35,15 @@ function App() {
   }, []);
 
   const navigate = (path: string, hash?: string) => {
-    window.history.pushState({}, '', path);
+    try {
+      // Try to update URL using History API
+      // This works on real hosting (Vercel) but might fail in sandboxed previews
+      window.history.pushState({}, '', path);
+    } catch (e) {
+      // Fail silently in restricted environments.
+      // The app will still function correctly using the React State (setCurrentPath) below.
+    }
+    
     setCurrentPath(path);
     window.scrollTo(0, 0);
     

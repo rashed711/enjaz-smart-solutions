@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SiteSettings } from '../types';
 import { CountUp } from './CountUp';
@@ -44,8 +43,8 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
   return (
     <section id="home" className="relative h-[100dvh] min-h-[550px] flex items-center justify-center overflow-hidden bg-secondary-950">
       
-      {/* Background Slider */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      {/* Background Slider - Optimized with will-change-transform */}
+      <div className="absolute inset-0 w-full h-full z-0 will-change-transform">
         {SLIDER_IMAGES.map((image, index) => (
           <div
             key={image.id}
@@ -57,6 +56,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
               src={image.url} 
               alt={image.alt} 
               className={`w-full h-full object-cover ${index === currentSlide ? 'animate-ken-burns' : ''}`}
+              loading={index === 0 ? "eager" : "lazy"}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-secondary-950 via-secondary-900/80 to-primary-900/40 mix-blend-multiply"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-secondary-950 via-transparent to-secondary-950/20"></div>
@@ -74,7 +74,8 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
           </Reveal>
           
           <Reveal delay={200}>
-            <h1 className="text-3xl sm:text-5xl lg:text-8xl font-extrabold text-white leading-tight mb-4 sm:mb-6 tracking-tight drop-shadow-2xl">
+            {/* Optimized typography for mobile */}
+            <h1 className="text-2xl sm:text-4xl lg:text-8xl font-extrabold text-white leading-tight mb-4 sm:mb-6 tracking-tight drop-shadow-2xl">
               {title.split(" ").slice(0, -1).join(" ")} <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200 neon-text-glow">
                  {title.split(" ").slice(-1)}
@@ -112,7 +113,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, lang }) => {
             </div>
           </Reveal>
 
-          {/* Glass Metrics */}
+          {/* Glass Metrics - Reduced blur on mobile handled by global CSS */}
           <div className="grid grid-cols-3 gap-2 sm:gap-4 border-t border-white/10 pt-4 sm:pt-6 mt-4 backdrop-blur-sm bg-white/5 rounded-2xl p-4 lg:bg-transparent lg:p-0 lg:backdrop-blur-none lg:rounded-none mx-2 sm:mx-0">
              <div className={`text-center ${lang === 'ar' ? 'lg:text-right' : 'lg:text-left'}`}>
                 <strong className="block text-xl sm:text-3xl lg:text-5xl font-bold text-white mb-1">
