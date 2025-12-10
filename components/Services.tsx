@@ -4,13 +4,26 @@ import { Service } from '../types';
 import { Icon } from './Icon';
 import { Reveal } from './Reveal';
 import { scrollToSection } from '../utils/scroll';
+import { Language } from '../App';
 
 interface ServicesProps {
   services: Service[];
-  onOpenHosting?: () => void;
+  onNavigate: (path: string, hash?: string) => void;
+  lang: Language;
 }
 
-export const Services: React.FC<ServicesProps> = ({ services, onOpenHosting }) => {
+export const Services: React.FC<ServicesProps> = ({ services, onNavigate, lang }) => {
+  const labels = {
+    tag: lang === 'ar' ? 'حلول استثنائية' : 'Exceptional Solutions',
+    title: lang === 'ar' ? 'خدماتنا' : 'Our',
+    titleHighlight: lang === 'ar' ? 'المتميزة' : 'Services',
+    desc: lang === 'ar' 
+      ? 'نجمع بين الإبداع الفني والتميز التقني لنقدم حلولاً رقمية تفوق التوقعات وتدفع أعمالك نحو المستقبل.'
+      : 'We combine artistic creativity with technical excellence to deliver digital solutions that exceed expectations.',
+    readMore: lang === 'ar' ? 'أعرف أكثر' : 'Read More',
+    viewPlans: lang === 'ar' ? 'عرض الباقات' : 'View Plans'
+  };
+
   return (
     <section id="services" className="py-20 lg:py-32 bg-secondary-950 relative overflow-hidden">
       
@@ -25,13 +38,13 @@ export const Services: React.FC<ServicesProps> = ({ services, onOpenHosting }) =
         <div className="text-center mb-16 lg:mb-24">
           <Reveal width="100%">
             <span className="inline-block py-1 px-3 rounded-md bg-primary-500/10 text-primary-400 font-bold text-xs tracking-[0.2em] uppercase mb-4 border border-primary-500/20">
-              حلول استثنائية
+              {labels.tag}
             </span>
             <h2 className="text-3xl lg:text-6xl font-black text-white mb-6 tracking-tight">
-              خدماتنا <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 to-secondary-300">المتميزة</span>
+              {labels.title} <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 to-secondary-300">{labels.titleHighlight}</span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-base lg:text-lg font-light leading-relaxed">
-              نجمع بين الإبداع الفني والتميز التقني لنقدم حلولاً رقمية تفوق التوقعات وتدفع أعمالك نحو المستقبل.
+              {labels.desc}
             </p>
           </Reveal>
         </div>
@@ -57,34 +70,30 @@ export const Services: React.FC<ServicesProps> = ({ services, onOpenHosting }) =
 
                   {/* Text */}
                   <h3 className="text-xl lg:text-2xl font-bold text-white mb-3 group-hover:text-primary-300 transition-colors">
-                    {service.title_ar}
+                    {lang === 'ar' ? service.title_ar : service.title_en}
                   </h3>
                   
                   <p className="text-gray-400 leading-relaxed mb-6 lg:mb-8 text-sm group-hover:text-gray-300 transition-colors">
-                    {service.description_ar}
+                    {lang === 'ar' ? service.description_ar : service.description_en}
                   </p>
 
                   {/* Animated Link */}
                   <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
                     <button 
                       onClick={(e) => {
-                        // Check if this is the Hosting service (ID 1)
-                        if (service.id === 1 && onOpenHosting) {
-                          e.preventDefault();
-                          onOpenHosting();
+                        e.preventDefault();
+                        if (service.id === 1) {
+                          onNavigate('/email-hosting');
                         } else {
-                          // Default behavior
-                          const anchor = e.currentTarget.parentElement?.querySelector('a');
-                          if(anchor) anchor.click();
-                          else scrollToSection(e as any, 'contact');
+                          scrollToSection(e as any, 'contact');
                         }
                       }}
                       className="text-sm font-bold text-white group-hover:text-primary-400 transition-colors bg-transparent border-none cursor-pointer p-0"
                     >
-                      {service.id === 1 ? 'عرض الباقات' : 'أعرف أكثر'}
+                      {service.id === 1 ? labels.viewPlans : labels.readMore}
                     </button>
                     <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-primary-500 group-hover:rotate-45 transition-all duration-300">
-                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" /></svg>
+                       <svg className={`w-3 h-3 ${lang === 'ar' ? '' : 'rotate-180'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </span>
                   </div>
                 </div>

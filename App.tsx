@@ -10,19 +10,48 @@ import { EmailHosting } from './components/EmailHosting';
 import { ApiService } from './services/api';
 import { SiteSettings, Service, Project } from './types';
 import { MOCK_SETTINGS } from './services/mockData';
-import { scrollToSection } from './utils/scroll';
 
-type ViewState = 'home' | 'email-hosting';
+export type Language = 'ar' | 'en';
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<ViewState>('home');
+  // Router State based on window location
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  const [lang, setLang] = useState<Language>('ar'); 
   const [settings, setSettings] = useState<SiteSettings>(MOCK_SETTINGS);
   const [services, setServices] = useState<Service[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
 
-  // Used to scroll to contact when coming from pricing page
   const [pendingScroll, setPendingScroll] = useState<string | null>(null);
+
+  // --- Router Logic ---
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigate = (path: string, hash?: string) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+    window.scrollTo(0, 0);
+    
+    if (hash) {
+      setPendingScroll(hash);
+    }
+  };
+  // --------------------
+
+  useEffect(() => {
+    // Update Document Direction based on Language
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    if(lang === 'ar') document.body.classList.add('rtl');
+    else document.body.classList.remove('rtl');
+  }, [lang]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,32 +73,25 @@ function App() {
     fetchData();
   }, []);
 
-  // Handle pending scrolls after view change
+  // Handle Pending Scrolls (e.g. when navigating from /email-hosting to /#contact)
   useEffect(() => {
-    if (view === 'home' && pendingScroll) {
+    if ((currentPath === '/' || currentPath === '/index.html') && pendingScroll) {
       setTimeout(() => {
         const element = document.getElementById(pendingScroll);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
         setPendingScroll(null);
-      }, 100);
-    } else {
-        window.scrollTo(0, 0);
+      }, 300); // Slight delay to ensure DOM render
     }
-  }, [view, pendingScroll]);
-
-  const handleNavigateHome = () => {
-    setView('home');
-  };
-
-  const handleOpenHosting = () => {
-    setView('email-hosting');
-  };
+  }, [currentPath, pendingScroll]);
 
   const handleOrderPlan = (planName: string) => {
-    setView('home');
-    setPendingScroll('contact');
+    navigate('/', 'contact');
+  };
+
+  const toggleLanguage = () => {
+    setLang(prev => prev === 'ar' ? 'en' : 'ar');
   };
 
   if (loading) {
@@ -77,39 +99,47 @@ function App() {
       <div className="min-h-screen flex items-center justify-center bg-secondary-950">
         <div className="flex flex-col items-center">
             <div className="w-16 h-16 border-4 border-primary-900 border-t-primary-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-primary-400 font-medium">جاري التحميل...</p>
+            <p className="text-primary-400 font-medium">{lang === 'ar' ? 'جاري التحميل...' : 'Loading...'}</p>
         </div>
       </div>
     );
   }
 
+  const isHome = currentPath === '/' || currentPath === '/index.html';
+  const isEmailHosting = currentPath === '/email-hosting';
+
   return (
-    <div className="antialiased text-gray-800 bg-secondary-950">
-      {/* Floating WhatsApp Button */}
+    <div className={`antialiased text-gray-800 bg-secondary-950 ${lang === 'en' ? 'font-sans' : ''}`}>
+      {/* Floating WhatsApp */}
       <a 
         href={settings.whatsapp_url} 
         target="_blank" 
         rel="noreferrer"
-        className="fixed bottom-6 left-6 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full shadow-lg shadow-[#25D366]/40 flex items-center justify-center hover:scale-110 hover:shadow-[#25D366]/60 transition-all duration-300 animate-bounce"
+        className={`fixed bottom-6 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full shadow-lg shadow-[#25D366]/40 flex items-center justify-center hover:scale-110 hover:shadow-[#25D366]/60 transition-all duration-300 animate-bounce ${lang === 'ar' ? 'left-6' : 'right-6'}`}
         aria-label="Chat on WhatsApp"
       >
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
       </a>
 
-      {/* Pass view state to Header to control behavior/visibility if needed */}
-      <Header onNavigateHome={handleNavigateHome} isHomePage={view === 'home'} />
+      <Header 
+        navigate={navigate}
+        isHomePage={isHome} 
+        lang={lang}
+        onToggleLang={toggleLanguage}
+      />
       
       <main>
-        {view === 'home' ? (
-          <>
-            <Hero settings={settings} />
-            <About />
-            <Services services={services} onOpenHosting={handleOpenHosting} />
-            <Portfolio projects={projects} />
-            <Contact settings={settings} />
-          </>
+        {isEmailHosting ? (
+          <EmailHosting onNavigate={navigate} onOrder={handleOrderPlan} lang={lang} />
         ) : (
-          <EmailHosting onBack={handleNavigateHome} onOrder={handleOrderPlan} />
+          /* Default to Home for / and any unknown route */
+          <>
+            <Hero settings={settings} lang={lang} />
+            <About lang={lang} />
+            <Services services={services} onNavigate={navigate} lang={lang} />
+            <Portfolio projects={projects} lang={lang} />
+            <Contact settings={settings} lang={lang} />
+          </>
         )}
       </main>
       
@@ -119,12 +149,18 @@ function App() {
             
             {/* Column 1: Brand */}
             <div className="md:col-span-1">
-               <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white font-bold text-lg">E</div>
-                <span className="text-2xl font-bold">إنجاز<span className="text-primary-500">تك</span>.</span>
+               <div className="flex items-center gap-3 mb-6">
+                <img 
+                    src="https://www2.0zz0.com/2025/12/10/11/631949405.png" 
+                    alt="Enjaz Logo" 
+                    className="h-10 w-auto object-contain"
+                />
+                <span className="text-xl font-bold">{lang === 'ar' ? 'انجاز' : 'Enjaz'} <span className="text-primary-500">{lang === 'ar' ? 'للحلول الذكية' : 'Smart Solutions'}</span></span>
                </div>
                <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                 نحن نصنع المستقبل الرقمي من خلال حلول برمجية مبتكرة وتصاميم إبداعية تضعك في المقدمة.
+                 {lang === 'ar' 
+                   ? 'نحن نصنع المستقبل الرقمي من خلال حلول برمجية مبتكرة وتصاميم إبداعية تضعك في المقدمة.'
+                   : 'We craft the digital future through innovative software solutions and creative designs that put you ahead.'}
                </p>
                <div className="flex gap-4">
                  <a href={settings.whatsapp_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary-600 transition-colors">
@@ -135,20 +171,20 @@ function App() {
 
             {/* Column 2: Links */}
             <div>
-              <h4 className="text-lg font-bold mb-6">روابط سريعة</h4>
+              <h4 className="text-lg font-bold mb-6">{lang === 'ar' ? 'روابط سريعة' : 'Quick Links'}</h4>
               <ul className="space-y-3 text-gray-400">
-                <li><button onClick={handleNavigateHome} className="hover:text-primary-400 transition-colors">الرئيسية</button></li>
-                <li><button onClick={handleOpenHosting} className="hover:text-primary-400 transition-colors">باقات الاستضافة</button></li>
+                <li><button onClick={() => navigate('/')} className="hover:text-primary-400 transition-colors">{lang === 'ar' ? 'الرئيسية' : 'Home'}</button></li>
+                <li><button onClick={() => navigate('/email-hosting')} className="hover:text-primary-400 transition-colors">{lang === 'ar' ? 'باقات الاستضافة' : 'Hosting Plans'}</button></li>
               </ul>
             </div>
 
              {/* Column 3: Contact */}
              <div>
-              <h4 className="text-lg font-bold mb-6">تواصل معنا</h4>
+              <h4 className="text-lg font-bold mb-6">{lang === 'ar' ? 'تواصل معنا' : 'Contact Us'}</h4>
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <span className="text-primary-500 mt-1">📍</span>
-                  <span>{settings.address_ar}</span>
+                  <span>{lang === 'ar' ? settings.address_ar : settings.address_en}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-primary-500">📞</span>
@@ -163,10 +199,10 @@ function App() {
           </div>
 
           <div className="border-t border-white/5 pt-8 text-center md:flex md:justify-between md:text-right items-center">
-             <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} {settings.company_name_ar}. جميع الحقوق محفوظة.</p>
+             <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} {lang === 'ar' ? settings.company_name_ar : settings.company_name_en}. {lang === 'ar' ? 'جميع الحقوق محفوظة' : 'All rights reserved'}.</p>
              <div className="flex justify-center md:justify-end gap-6 mt-4 md:mt-0 text-sm text-gray-500">
-                <a href="#" className="hover:text-primary-400">سياسة الخصوصية</a>
-                <a href="#" className="hover:text-primary-400">شروط الاستخدام</a>
+                <a href="#" className="hover:text-primary-400">{lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}</a>
+                <a href="#" className="hover:text-primary-400">{lang === 'ar' ? 'شروط الاستخدام' : 'Terms of Use'}</a>
              </div>
           </div>
         </div>
